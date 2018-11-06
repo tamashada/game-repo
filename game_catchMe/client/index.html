@@ -1,0 +1,39 @@
+<svg width="1000" height="500" style="border: 1px solid black;">
+    <rect id="gameObj" x="50" y="20" rx="3" ry="3" width="30" height="30"
+    style="fill:red;stroke:black;stroke-width:5;opacity:0.5" />
+</svg>
+
+<script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+<script>
+    var socket = io();
+
+    socket.on('moveAck', function(pos) {
+        let _rect = document.getElementById('gameObj');
+        let _x = _rect.getAttribute('x')*1;
+        let _y = _rect.getAttribute('y')*1;
+        console.log("x: " + _x + ", y: " + _y);
+        _rect.setAttribute('x', _x + pos.x*1);
+        _rect.setAttribute('y', _y + pos.y*1);
+    });
+
+    window.addEventListener('keydown', function(e) {
+        if (e.keyCode == 37) {
+            socket.emit('move', {
+                dir: 'left'
+            });
+        } else if (e.keyCode == 38) {
+            socket.emit('move', {
+                dir: 'up'
+            });
+        } else if (e.keyCode == 39) {
+            socket.emit('move', {
+                dir: 'right'
+            });                        
+        } else if (e.keyCode == 40) {
+            socket.emit('move', {
+                dir: 'down'
+            });                        
+        }
+
+        });
+</script>
